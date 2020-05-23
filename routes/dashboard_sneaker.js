@@ -3,9 +3,10 @@ const router = new express.Router(); // create an app sub-module (router)
 const sneakerModel = require("./../models/Sneaker");
 const tagModel = require("./../models/Tag");
 const uploader = require("./../config/cloudinary");
+const protectPrivateRoute = require("./../middlewares/protectPrivateRoute")
 
-
-router.get("/prod-add", (req, res, next) => {
+// Afficher la page pour ajouter un produit
+router.get("/prod-add", protectPrivateRoute, (req, res, next) => {
     tagModel
         .find()
         .then((dbRes) => {
@@ -16,7 +17,8 @@ router.get("/prod-add", (req, res, next) => {
         .catch(next)
 })
 
-router.get("/prod-manage", (req, res, next) => {
+// Afficher la page pour manager les produits
+router.get("/prod-manage", protectPrivateRoute, (req, res, next) => {
     sneakerModel
         .find()
         .then((dbRes) => {
@@ -27,7 +29,8 @@ router.get("/prod-manage", (req, res, next) => {
         .catch(next);
 })
 
-router.get("/product-edit/:id", (req, res, next) => {
+// Afficher la page pour éditer un produit
+router.get("/product-edit/:id", protectPrivateRoute, (req, res, next) => {
     sneakerModel
         .findById(req.params.id)
         .then((dbRes) => {
@@ -38,14 +41,16 @@ router.get("/product-edit/:id", (req, res, next) => {
         .catch(next)
 });
 
-router.post("/prod-edit/:id", (req, res, next) => {
+// Editer un produit
+router.post("/prod-edit/:id", protectPrivateRoute, (req, res, next) => {
     sneakerModel
         .findByIdAndUpdate(req.params.id, req.body)
         .then(() => res.redirect("/prod-manage"))
         .catch(next);
 })
 
-router.post("/product-delete/:id", (req, res, next) => {
+// Effacer un produit
+router.post("/product-delete/:id", protectPrivateRoute, (req, res, next) => {
     sneakerModel
         .findByIdAndDelete(req.params.id)
         .then((dbRes) => {
@@ -54,8 +59,11 @@ router.post("/product-delete/:id", (req, res, next) => {
         .catch(next)
 })
 
-router.post("/prod-add", uploader.single("image"), (req, res, next) => {
-    const newsneaker = {... req.body};
+// Ajouter un produit
+router.post("/prod-add", protectPrivateRoute, uploader.single("image"), (req, res, next) => {
+    const newsneaker = {
+        ...req.body
+    };
     if (req.file) newsneaker.image = req.file.secure_url;
     sneakerModel
         .create(newsneaker)
@@ -65,9 +73,8 @@ router.post("/prod-add", uploader.single("image"), (req, res, next) => {
         .catch(next)
 })
 
-
-// ------------ tag ---------------
-router.post("/tag-add", (req, res, next) => {
+// Ajouter un tag
+router.post("/tag-add", protectPrivateRoute, (req, res, next) => {
     tagModel
         .create(req.body)
         .then((dbRes) => {
@@ -75,7 +82,5 @@ router.post("/tag-add", (req, res, next) => {
         })
         .catch(next)
 })
-
-
 
 module.exports = router;
