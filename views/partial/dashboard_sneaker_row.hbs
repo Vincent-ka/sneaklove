@@ -11,8 +11,14 @@
   <div>${{this.price}}</div>
 </td>
 <td class="table-division">
-  <a href="/product-edit/{{this._id}}" data-id-sneaker="{{this._id}}" class="fa fa-edit table-icon"></a>
+  <a href="/product-edit/{{this._id}}">
+  <span data-id-sneaker="{{this._id}}" class="fa fa-edit table-icon"></span></a>
 </td>
 <td class="table-division">
+  <form method="post" action="/product-delete/{{this._id}}">
+  <button>
   <span class="fa fa-trash table-icon" data-id-sneaker="{{this._id}}"  aria-hidden="true"></span>
+  </button>
+  </form>
+  
 </td>

@@ -1,33 +1,79 @@
 const express = require("express");
 const router = express.Router();
+const sneakerModel = require("./../models/Sneaker")
+const tagModel = require("./../models/Tag");
 
-return console.log(`
------------------------------
------------------------------
-node says : wax on / wax off !
------------------------------
------------------------------`
-);
 
 router.get("/", (req, res) => {
-  res.send("foo");
+  res.render("index");
 });
 
-router.get("/sneakers/:cat", (req, res) => {
-  res.send("bar");
+// router.get("/sneakers/:cat", (req, res, next) => {
+//   sneakerModel
+//     .find()
+//     .then((dbRes) => {
+//       res.render("products", {
+//         sneakers: dbRes
+//       })
+//     })
+//     .catch(next);
+// });
+
+router.get("/sneakers/collection", (req, res, next) => {
+  Promise.all([sneakerModel.find(), tagModel.find()])
+  .then ((dbRes) => {
+    res.render("products", {
+      sneakers: dbRes[0],
+      tags: dbRes[1]
+    })
+  })
+  .catch(next)
 });
 
-router.get("/one-product/:id", (req, res) => {
-  res.send("baz");
+router.get("/sneakers/men", (req, res, next) => {
+  Promise.all([sneakerModel.find(), tagModel.find()])
+  .then ((dbRes) => {
+    res.render("products", {
+      sneakers: dbRes[0],
+      tags: dbRes[1]
+    })
+  })
+  .catch(next)
 });
 
-router.get("/signup", (req, res) => {
-  res.send("sneak");
+router.get("/sneakers/women", (req, res, next) => {
+  Promise.all([sneakerModel.find(), tagModel.find()])
+  .then ((dbRes) => {
+    res.render("products", {
+      sneakers: dbRes[0],
+      tags: dbRes[1]
+    })
+  })
+  .catch(next)
 });
 
-router.get("/signin", (req, res) => {
-  res.send("love");
+router.get("/sneakers/kids", (req, res, next) => {
+  Promise.all([sneakerModel.find(), tagModel.find()])
+  .then ((dbRes) => {
+    res.render("products", {
+      sneakers: dbRes[0],
+      tags: dbRes[1]
+    })
+  })
+  .catch(next)
 });
+
+router.get("/one-product/:id", (req, res, next) => {
+  sneakerModel
+    .findById(req.params.id)
+    .then((dbRes) => {
+      res.render("one_product", {
+        sneaker: dbRes
+      })
+    })
+    .catch(next)
+});
+
 
 
 module.exports = router;
