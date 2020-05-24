@@ -24,7 +24,7 @@ router.post("/signup", (req, res, next) => {
     if (!user.name || !user.lastname || !user.email || !user.password) {
         req.flash("warning", "Veuillez remplir tous les champs requis !")
         res.redirect("/signup")
-    }
+    } else {
     userModel
         .findOne({
             email: user.email
@@ -48,7 +48,7 @@ router.post("/signup", (req, res, next) => {
             res.redirect("/signin")
         })
         .catch(next)
-
+    }
 })
 
 // Se connecter au site
