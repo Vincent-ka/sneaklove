@@ -12,7 +12,7 @@ const hbs = require("hbs");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
-const dev_mode = false;
+const dev_mode = true;
 const logger = require("morgan");
 const path = require("path");
 

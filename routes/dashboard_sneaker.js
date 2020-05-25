@@ -31,11 +31,11 @@ router.get("/prod-manage", protectPrivateRoute, (req, res, next) => {
 
 // Afficher la page pour éditer un produit
 router.get("/product-edit/:id", protectPrivateRoute, (req, res, next) => {
-    sneakerModel
-        .findById(req.params.id)
+    Promise.all([sneakerModel.findById(req.params.id), tagModel.find()])
         .then((dbRes) => {
             res.render("product_edit", {
-                sneaker: dbRes
+                sneaker: dbRes[0],
+                tags: dbRes[1]
             })
         })
         .catch(next)

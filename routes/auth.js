@@ -25,29 +25,29 @@ router.post("/signup", (req, res, next) => {
         req.flash("warning", "Veuillez remplir tous les champs requis !")
         res.redirect("/signup")
     } else {
-    userModel
-        .findOne({
-            email: user.email
-        })
-        .then((dbRes) => {
-            if (dbRes) {
-                req.flash("warning", "Désolé cet email est déjà pris");
-                res.redirect("/signup")
-            }
-        })
-        .catch(next)
+        userModel
+            .findOne({
+                email: user.email
+            })
+            .then((dbRes) => {
+                if (dbRes) {
+                    req.flash("warning", "Désolé cet email est déjà pris");
+                    res.redirect("/signup")
+                }
+            })
+            .catch(next)
 
-    const salt = bcrypt.genSaltSync(10);
-    const hashed = bcrypt.hashSync(user.password, salt);
-    user.password = hashed;
+        const salt = bcrypt.genSaltSync(10);
+        const hashed = bcrypt.hashSync(user.password, salt);
+        user.password = hashed;
 
-    userModel
-        .create(user)
-        .then((dbRes) => {
-            req.flash("success", "Votre inscription est validée !");
-            res.redirect("/signin")
-        })
-        .catch(next)
+        userModel
+            .create(user)
+            .then((dbRes) => {
+                req.flash("success", "Votre inscription est validée !");
+                res.redirect("/signin")
+            })
+            .catch(next)
     }
 })
 
